@@ -19,10 +19,6 @@ import qs from "query-string";
 import { useLocation } from "react-router";
 import NavAndViz from "components/NavAndViz/NavAndViz";
 import useSyncStateToUrl from "components/useSyncStateToUrl";
-// import xmljs from "xml-js"; // https://www.npmjs.com/package/xml-js
-import values from "./values.xml";
-import axios from "axios";
-console.log("🌟🚨 ~ values", values);
 
 // compare to RCSB.org protein viewer https://www.rcsb.org/3d-view/3j3q/1
 
