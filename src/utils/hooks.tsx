@@ -2,7 +2,7 @@ import { SERVER_URL } from "./constants";
 import { useState, useEffect } from "react";
 import {
   useConfig,
-  useSetTweets,
+  useSetNodes,
   useLoading,
   useAddTweets,
   useNodes,
@@ -18,7 +18,7 @@ import { uniq } from "lodash";
 
 export function useFetchTweetsByIds(): (ids: string[]) => void {
   const setLoading = useSetLoading();
-  const setTweets = useSetTweets();
+  const setNodes = useSetNodes();
 
   return async (ids: string[]) => {
     setLoading(true);
@@ -28,7 +28,7 @@ export function useFetchTweetsByIds(): (ids: string[]) => void {
     const nodesResponses = await resp.json();
     const data = nodesResponses.map((d) => d.data);
 
-    setTweets(data);
+    setNodes(data);
   };
 }
 
@@ -69,7 +69,7 @@ export function useFetchTimeline() {
   const { numTweets } = useConfig();
   const { allowedMediaTypesParam } = useParamsForFetch();
 
-  const setTweets = useSetTweets();
+  const setNodes = useSetNodes();
   const nodes = useNodes();
   const addTweets = useAddTweets();
 
@@ -87,7 +87,7 @@ export function useFetchTimeline() {
     );
     const data = await resp.json();
 
-    (isFetchMore ? addTweets : setTweets)(data);
+    (isFetchMore ? addTweets : setNodes)(data);
   };
 
   const fetchTimelineByHandle = async (userHandle: string) => {
@@ -101,7 +101,7 @@ export function useFetchTimeline() {
     );
     const data = await resp.json();
 
-    setTweets(data);
+    setNodes(data);
   };
 
   return { loading, fetchTimeline, fetchTimelineByHandle };
@@ -120,7 +120,7 @@ function getMaxIdParam(nodesByUser: Tweet[]) {
 export function useFetchUsers() {
   const { allowedMediaTypesParam } = useParamsForFetch();
   const { toggleFavoriteUser } = getFavorites();
-  const setTweets = useSetTweets();
+  const setNodes = useSetNodes();
   return async (userHandles: string[]) => {
     const results = await (Promise as any).allSettled(
       userHandles.map((userHandle) =>
@@ -147,7 +147,7 @@ export function useFetchUsers() {
         }
       }
     );
-    setTweets(newTweets);
+    setNodes(newTweets);
   };
 }
 
@@ -155,7 +155,7 @@ export function useFetchLikes() {
   const setLoading = useSetLoading();
   const { numTweets } = useConfig();
   const { allowedMediaTypesParam } = useParamsForFetch();
-  const setTweets = useSetTweets();
+  const setNodes = useSetNodes();
   const likesByUserId = useLikesByUserId();
   const setLikesByUserId = useSetLikesByUserId();
 
@@ -183,7 +183,7 @@ export function useFetchLikes() {
       ]),
     };
     setLikesByUserId(newLikesByUserId);
-    setTweets(likedTweets.map((tweet) => ({ ...tweet, isLikedNode: true })));
+    setNodes(likedTweets.map((tweet) => ({ ...tweet, isLikedNode: true })));
   };
 }
 
@@ -198,7 +198,7 @@ export function useFetchRetweets() {
   const setLoading = useSetLoading();
   const { numTweets } = useConfig();
   const { allowedMediaTypesParam } = useParamsForFetch();
-  const setTweets = useSetTweets();
+  const setNodes = useSetNodes();
   // const retweetsByTweetId = useRetweetsByTweetId();
   // const setRetweetsByTweetId = useSetRetweetsByTweetId();
 
@@ -221,7 +221,7 @@ export function useFetchRetweets() {
     //     ...retweetTweets.map((tweet) => tweet.id_str),
     //   ],
     // });
-    setTweets(
+    setNodes(
       retweetTweets /* .map((tweet) => ({ ...tweet, isRetweetNode: true })) */
     );
   };

@@ -1,25 +1,28 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import "./App.css";
 import styled from "styled-components/macro";
 import BottomDrawer from "./components/BottomDrawer/BottomDrawer";
 import { useMount } from "./utils/utils";
 import { useFetchTweetsByIds } from "./utils/hooks";
 import {
-  useSetTweets,
   useLoading,
   useNodes,
   useSetLoading,
   useConfig,
 } from "./providers/store";
-import { query as q } from "faunadb";
-import { faunaClient } from "./providers/faunaProvider";
+// import { query as q } from "faunadb";
+// import { faunaClient } from "./providers/faunaProvider";
 import { useIsLight } from "./providers/ThemeManager";
 import "./video-react.css"; // import video-react css
 import LeftDrawer, { LEFT_DRAWER_WIDTH } from "./components/LeftDrawer";
 import qs from "query-string";
 import { useLocation } from "react-router";
 import NavAndViz from "components/NavAndViz/NavAndViz";
-import * as d3 from "d3";
+import useSyncStateToUrl from "components/useSyncStateToUrl";
+// import xmljs from "xml-js"; // https://www.npmjs.com/package/xml-js
+import values from "./values.xml";
+import axios from "axios";
+console.log("🌟🚨 ~ values", values);
 
 // compare to RCSB.org protein viewer https://www.rcsb.org/3d-view/3j3q/1
 
@@ -62,6 +65,7 @@ function App() {
 function AppFunctionalHooks() {
   useFetchTweetsOnMount();
   useFetchQueryTweetsOnMount();
+  useSyncStateToUrl();
   useStopLoadingEventually();
   useDetectOffline();
 
@@ -84,20 +88,8 @@ function useStopLoadingEventually() {
   const loading = useLoading();
   const setLoading = useSetLoading();
   // const nodes = useNodes();
-  const [nodes, setNodes] = useState();
-  useMount(() => {
-    // fetch the nodes on mount
-    d3.xml("data/protein.xml").then((xml) => {
-      const data = d3
-        .select(xml)
-        .selectAll("data")
-        .each((data) => data);
-      console.log("🌟🚨 ~ d3.xml ~ data", data);
-      console.log("🌟🚨 ~ useMount ~ xml", xml);
-      setNodes(data);
-    });
-  });
-  const prevTweets = useRef(nodes);
+  const nodes = useNodes();
+  const prevNodes = useRef(nodes);
 
   // when loading starts, start a timer to stop loading
   useEffect(() => {
@@ -112,7 +104,7 @@ function useStopLoadingEventually() {
 
   // when nodes length changes, stop loading
   useEffect(() => {
-    if (prevTweets.current.length !== nodes.length) {
+    if (prevNodes.current.length !== nodes.length) {
       setLoading(false);
       const app = document.querySelector(".App");
       if (!app) {
@@ -148,31 +140,52 @@ export default App;
  * [docs](https://docs.fauna.com/fauna/current/tutorials/crud?lang=javascript#retrieve)
  */
 function useFetchTweetsOnMount() {
-  const setTweets = useSetTweets();
-
-  // fetch nodes from DB on mount
+  // const setNodes = useSetNodes();
   useMount(() => {
-    if (process.env.NODE_ENV === "development") {
-      return;
-    }
-
-    faunaClient
-      .query(
-        q.Map(
-          q.Paginate(q.Documents(q.Collection("Tweet"))),
-          q.Lambda((x) => q.Get(x))
-        )
-      )
-      .then((ret: { data: any[] } | any) => {
-        if (ret.data) {
-          setTweets(ret.data.map((d) => d.data));
-        }
+    // fetch the nodes on mount
+    // https://stackoverflow.com/questions/58704755/how-to-read-xml-filedata-xml-in-react-js
+    axios
+      .get("./assets/values.xml", {
+        "Content-Type": "application/xml; charset=utf-8",
+      } as any)
+      .then(function (response) {
+        console.log("🌟🚨 ~ .then ~ response", response);
+        // const jsonText = xmljs.xml2json(xmltext, {
+        //   compact: true,
+        //   spaces: 2,
+        // }); // https://www.npmjs.com/package/xml-js#quick-start
+        // console.log("🌟🚨 ~ .then ~ jsonText", jsonText);
+        // const converted = JSON.parse(jsonText);
+        // console.log("🌟🚨 ~ .then ~ converted", converted);
+        // return converted;
       })
-      .catch((err) => {
-        console.error(err);
-        setTweets([]);
+      .catch(function (error) {
+        console.log(error);
       });
   });
+  // fetch nodes from DB on mount
+  // useMount(() => {
+  //   if (process.env.NODE_ENV === "development") {
+  //     return;
+  //   }
+
+  //   faunaClient
+  //     .query(
+  //       q.Map(
+  //         q.Paginate(q.Documents(q.Collection("Tweet"))),
+  //         q.Lambda((x) => q.Get(x))
+  //       )
+  //     )
+  //     .then((ret: { data: any[] } | any) => {
+  //       if (ret.data) {
+  //         setNodes(ret.data.map((d) => d.data));
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //       setNodes([]);
+  //     });
+  // });
 }
 
 /** fetch nodes if there's a query string like /?t=12345,12346

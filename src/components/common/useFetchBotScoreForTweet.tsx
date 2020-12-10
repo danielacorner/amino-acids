@@ -1,15 +1,15 @@
-import { useSetTweets, useNodes } from "providers/store";
+import { useSetNodes, useNodes } from "providers/store";
 import { BotScore, Tweet } from "types";
 
 export function useFetchBotScoreForTweet() {
   const nodes = useNodes();
-  const setTweets = useSetTweets();
+  const setNodes = useSetNodes();
 
   function setBotScoreForTweet(botScore: BotScore, tweet: Tweet) {
     const tweetWithBotScore = { ...tweet, botScore };
     const tweetIndex = nodes.findIndex((t) => t.id_str === tweet.id_str);
 
-    setTweets([
+    setNodes([
       ...nodes.slice(0, tweetIndex),
       tweetWithBotScore,
       ...nodes.slice(tweetIndex + 1),

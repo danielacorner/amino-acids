@@ -1,0 +1,27 @@
+{
+  "name": "twitbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./server.js"
+  },
+  "engines": {
+    "node": "12.16.2"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "faunadb": "^3.0.1",
+    "lodash.uniqby": "^4.7.0",
+    "node-twitter-api": "^1.8.0",
+    "nodemon": "^2.0.4",
+    "sentiment": "^5.0.2",
+    "twit": "^2.2.11",
+    "unirest": "^0.6.0"
+  }
+}

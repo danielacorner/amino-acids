@@ -4,7 +4,7 @@ import { SERVER_URL } from "../../utils/constants";
 import { useFetchTimeline, useParamsForFetch } from "../../utils/hooks";
 import {
   useConfig,
-  useSetTweets,
+  useSetNodes,
   useLoading,
   useSetLoading,
 } from "../../providers/store";
@@ -16,7 +16,7 @@ export function SearchForm() {
   const { numTweets, resultType } = useConfig();
   const loading = useLoading();
   const setLoading = useSetLoading();
-  const setTweets = useSetTweets();
+  const setNodes = useSetNodes();
   const { fetchTimelineByHandle } = useFetchTimeline();
 
   const {
@@ -39,7 +39,7 @@ export function SearchForm() {
       );
       const data = await resp.json();
 
-      setTweets(data);
+      setNodes(data);
     }
   };
   return (

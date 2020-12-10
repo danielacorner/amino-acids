@@ -1,7 +1,7 @@
 import React from "react";
 import {
   useConfig,
-  useSetTweets,
+  useSetNodes,
   useLoading,
   useAllowedMediaTypes,
   useSetLoading,
@@ -22,7 +22,7 @@ export function BtnStreamNewTweets() {
   const allowedMediaTypesStrings = useAllowedMediaTypes();
   const loading = useLoading();
   const setLoading = useSetLoading();
-  const setTweets = useSetTweets();
+  const setNodes = useSetNodes();
 
   const fetchNewTweets = async () => {
     setLoading(true);
@@ -47,7 +47,7 @@ export function BtnStreamNewTweets() {
 
     const data = await resp.json();
 
-    setTweets(data);
+    setNodes(data);
   };
 
   return (

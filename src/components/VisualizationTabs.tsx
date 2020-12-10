@@ -5,7 +5,6 @@ import Wordcloud from "./Wordcloud/Wordcloud";
 import styled from "styled-components/macro";
 import Gallery from "./Gallery/Gallery";
 import { TABS_HEIGHT, TAB_INDICES } from "../utils/constants";
-import useSyncStateToUrl from "./useSyncStateToUrl";
 
 const Div = styled.div``;
 
@@ -18,12 +17,8 @@ function a11yProps(index: any) {
 
 export default function VisualizationTabs() {
   // sync tab index & tweet ids to url
-  const [tabIndex, setTabIndex] = useSyncStateToUrl();
-
-  const handleChange = (event, newValue) => {
-    setTabIndex(newValue);
-  };
-
+  const tabIndex = 0;
+  const handleChange = () => {};
   return (
     <Div
       className="visualizationTabs"
@@ -43,7 +38,7 @@ export default function VisualizationTabs() {
       `}
     >
       <Tabs
-        value={tabIndex}
+        value={0}
         onChange={handleChange}
         className="tabs"
         aria-label="simple tabs example"

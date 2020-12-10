@@ -7,7 +7,7 @@ import {
 } from "../../utils/hooks";
 import {
   useConfig,
-  useSetTweets,
+  useSetNodes,
   useTooltipNode,
   useNodes,
 } from "providers/store";
@@ -47,7 +47,7 @@ export default function RightClickMenu({
 
   const fetchBotScoreForTweet = useFetchBotScoreForTweet();
 
-  const setTweets = useSetTweets();
+  const setNodes = useSetNodes();
   const deleteTweetsByUser = () => {
     if (!tooltipNode) {
       return;
@@ -60,7 +60,7 @@ export default function RightClickMenu({
     const prevReplace = replace;
     setConfig({ replace: true });
     setTimeout(() => {
-      setTweets(nodesWithoutThisUser, true);
+      setNodes(nodesWithoutThisUser, true);
       setConfig({ replace: prevReplace });
     });
     // setTimeout(() => {

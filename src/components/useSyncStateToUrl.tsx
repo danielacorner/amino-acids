@@ -1,32 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useHistory, useLocation } from "react-router";
 import { useNodes } from "../providers/store";
-import { TAB_INDICES } from "utils/constants";
 import qs from "query-string";
 
-/** when the nodes change, update the url */
-export default function useSyncStateToUrl(): [
-  number,
-  React.Dispatch<React.SetStateAction<number>>
-] {
+/** when the tweets change, update the url */
+export default function useSyncStateToUrl() {
   const nodes = useNodes();
   const history = useHistory();
   const { pathname, search } = useLocation();
   const queryObj = qs.parse(search);
 
-  const initialTabIndex = queryObj.tab
-    ? Number(queryObj.tab)
-    : TAB_INDICES.NETWORKGRAPH;
-
-  const [tabIndex, setTabIndex] = useState(initialTabIndex);
-
-  // TODO: not working when fetch nodes by id?
+  // TODO: not working when fetch tweets by id?
   useEffect(() => {
     // const queryObj = qs.parse(search);
     const newQueryObj = {
       ...queryObj,
-      tab: tabIndex,
-      nodes: nodes.map((t) => t.id_str).join(","),
+      ...(nodes ? { nodes: nodes.map((t) => t.id_str).join(",") } : {}),
     };
 
     const newSearch = "?" + qs.stringify(newQueryObj);
@@ -37,6 +26,5 @@ export default function useSyncStateToUrl(): [
     if (newPathAndSearch !== oldPathAndSearch) {
       history.push(newPathAndSearch);
     }
-  }, [pathname, history, nodes, tabIndex, search, queryObj]);
-  return [tabIndex, setTabIndex];
+  }, [pathname, history, nodes, search, queryObj]);
 }

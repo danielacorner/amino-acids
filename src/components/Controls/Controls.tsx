@@ -12,7 +12,7 @@ import {
 import {
   useLoading,
   useNodes,
-  useSetTweets,
+  useSetNodes,
   useIsLeftDrawerOpen,
   useSetLoading,
   useSearchObj,
@@ -122,7 +122,7 @@ function SaveDataForm() {
 }
 
 function SavedDatasetsList() {
-  const setTweets = useSetTweets();
+  const setNodes = useSetNodes();
   const loading = useLoading();
   const setLoading = useSetLoading();
 
@@ -138,7 +138,7 @@ function SavedDatasetsList() {
     const nodesResponses = await resp.json();
     const data = nodesResponses.map((d) => d.data);
 
-    setTweets(data);
+    setNodes(data);
   };
 
   return (
