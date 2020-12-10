@@ -9,7 +9,6 @@ import { useWindowSize } from "../../utils/hooks";
 import { CONTROLS_WIDTH } from "../../utils/constants";
 import { useIsLight } from "../../providers/ThemeManager";
 import { Tweet } from "types";
-import UserInfo from "../common/UserInfo";
 import { RowDiv } from "../common/styledComponents";
 
 const AVATAR_WIDTH = 46;

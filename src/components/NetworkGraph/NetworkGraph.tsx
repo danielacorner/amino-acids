@@ -223,5 +223,5 @@ function useShowHideUserNodes(
       const newUserNodes = uniqBy(nonUniqueUserNodes, (d) => d.user.id_str);
       setUserNodes(newUserNodes);
     }
-  }, [showUserNodes, nodes]);
+  }, [setUserNodes, showUserNodes, nodes]);
 }

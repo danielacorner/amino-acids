@@ -40,7 +40,6 @@ export function useForceGraphProps() {
     isPaused,
     isGridMode,
     isStorybook,
-    isOffline,
   } = useConfig();
 
   const allowedMediaTypesStrings = useAllowedMediaTypes();
