@@ -2,6 +2,12 @@ module.exports = { generateNewTweetsDataset, addSentimentToTweet };
 const { stream, sentiment } = require("../utils");
 
 const fs = require("fs");
+const {
+  deleteFile,
+  handleErr,
+  openFile,
+  writeToFile,
+} = require("../utils/fsUtils");
 
 let count = 0;
 let bytes = 0;
@@ -20,20 +26,6 @@ function generateNewTweetsDataset({ numTweets, filePath }) {
       streamTweets(fileDirNum, numTweets);
     });
   });
-}
-
-function handleErr(err) {
-  if (err) throw err;
-}
-
-function deleteFile(filePath, cb) {
-  return fs.unlink(filePath, cb);
-}
-
-// once deleted, open "./tweets.json" file
-function openFile(filePath, cb) {
-  console.log(`opening file ${filePath}`);
-  fs.open(filePath, "w", cb);
 }
 
 // then stream tweets
@@ -64,7 +56,7 @@ function writeTweetOnReceive(tweet, fileDirNum, numTweets) {
 
   // save to "./tweets.json"
   // https://nodejs.org/api/fs.html#fs_fs_writefile_file_data_options_callback
-  fs.write(fileDirNum, tweetWithBracket, null, "utf8", onWriteToFile);
+  writeToFile(fileDirNum, tweetWithBracket, onWriteToFile);
 
   // stop eventually
   if (count === numTweets) {

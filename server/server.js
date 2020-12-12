@@ -2,11 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const path = require("path");
-const fs = require("fs");
-
-const { FILTER_LEVEL, filterByMediaType } = require("./utils");
-
-const getTimeline = require("./functions/getTimeline");
+const { readFromFile } = require("./utils/fsUtils");
 
 app.use(express.static(`main`));
 app.use(bodyParser.json());
@@ -25,19 +21,11 @@ app.get("/", function (req, res) {
 });
 
 app.get("/api/protein", async function (req, res) {
-  const protein = await openFile();
-
-  res.json(tweets);
+  readFromFile("../data/proteins/3j3q.xml", (proteinData) => {
+    console.log("🌟🚨 ~ proteinData", proteinData);
+    res.json(proteinData);
+  });
 });
-
-function openFile(filePath, numTweets, err) {
-  if (err) console.log(err); // if no file found, keep going
-
-  console.log(`opening file ${filePath}`);
-  fs.open(filePath, "w", (err, fileDirNum) =>
-    streamTweets(err, fileDirNum, numTweets)
-  );
-}
 
 app.listen(process.env.PORT || 8080, () => {
   console.log("server listening on port " + (process.env.PORT || 8080));
