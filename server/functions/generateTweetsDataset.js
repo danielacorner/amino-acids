@@ -8,26 +8,36 @@ let bytes = 0;
 
 function generateNewTweetsDataset({ numTweets, filePath }) {
   console.log("The bot is starting 👋");
-  console.log(`deleting file`);
 
   // delete "./tweets.json" file
-  fs.unlink(filePath, (err) => openFile(err, filePath, numTweets));
+  console.log(`deleting file`);
+  deleteFile(filePath, (err) => {
+    handleErr(err);
+    console.log(`opening file`);
+    openFile(filePath, (err, fileDirNum) => {
+      handleErr(err);
+      console.log(`streaming data to file...`);
+      streamTweets(fileDirNum, numTweets);
+    });
+  });
+}
+
+function handleErr(err) {
+  if (err) throw err;
+}
+
+function deleteFile(filePath, cb) {
+  return fs.unlink(filePath, cb);
 }
 
 // once deleted, open "./tweets.json" file
-function openFile(err, filePath, numTweets) {
-  if (err) console.log(err); // if no file found, keep going
-
+function openFile(filePath, cb) {
   console.log(`opening file ${filePath}`);
-  fs.open(filePath, "w", (err, fileDirNum) =>
-    streamTweets(err, fileDirNum, numTweets)
-  );
+  fs.open(filePath, "w", cb);
 }
 
 // then stream tweets
-function streamTweets(err, fileDirNum, numTweets) {
-  if (err) throw err;
-
+function streamTweets(fileDirNum, numTweets) {
   stream.on("tweet", (tweet) =>
     writeTweetOnReceive(tweet, fileDirNum, numTweets)
   );

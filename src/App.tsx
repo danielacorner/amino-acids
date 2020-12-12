@@ -20,7 +20,11 @@ import { useLocation } from "react-router";
 import NavAndViz from "components/NavAndViz/NavAndViz";
 import useSyncStateToUrl from "components/useSyncStateToUrl";
 
+// 3d protein react-3-fiber nodes
+
 // compare to RCSB.org protein viewer https://www.rcsb.org/3d-view/3j3q/1
+
+// compare to NCBI protein viewer https://www.ncbi.nlm.nih.gov/Structure/icn3d/full.html?mmdbid=1TUP
 
 // download pdb structures https://www.rcsb.org/downloads
 
@@ -59,7 +63,7 @@ function App() {
 }
 
 function AppFunctionalHooks() {
-  useFetchTweetsOnMount();
+  useFetchNodesOnMount();
   useFetchQueryTweetsOnMount();
   useSyncStateToUrl();
   useStopLoadingEventually();
@@ -135,16 +139,13 @@ export default App;
  *
  * [docs](https://docs.fauna.com/fauna/current/tutorials/crud?lang=javascript#retrieve)
  */
-function useFetchTweetsOnMount() {
+function useFetchNodesOnMount() {
   // const setNodes = useSetNodes();
   useMount(() => {
     // fetch the nodes on mount
     // https://stackoverflow.com/questions/58704755/how-to-read-xml-filedata-xml-in-react-js
-    axios
-      .get("./assets/values.xml", {
-        "Content-Type": "application/xml; charset=utf-8",
-      } as any)
-      .then(function (response) {
+    fetch("/api/protein")
+      .then((response) => {
         console.log("🌟🚨 ~ .then ~ response", response);
         // const jsonText = xmljs.xml2json(xmltext, {
         //   compact: true,
