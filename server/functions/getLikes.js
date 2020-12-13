@@ -44,7 +44,7 @@ async function getLikes({
 
     fetchedTweets = uniqBy(
       [...fetchedTweets, ...result.data.filter(filterFn)],
-      (t) => t.id_str
+      (t) => t.id
     );
   }
 

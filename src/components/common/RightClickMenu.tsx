@@ -54,7 +54,7 @@ export default function RightClickMenu({
     }
 
     const nodesWithoutThisUser = nodes.filter(
-      (t) => t.user.id_str !== tooltipNode.user.id_str
+      (t) => t.user.id !== tooltipNode.user.id
     );
 
     const prevReplace = replace;
@@ -77,7 +77,7 @@ export default function RightClickMenu({
       <MenuItem
         onClick={() => {
           if (user) {
-            fetchTimeline(user.id_str);
+            fetchTimeline(user.id);
           }
           handleClose();
         }}
@@ -93,7 +93,7 @@ export default function RightClickMenu({
         <MenuItem
           onClick={() => {
             if (user) {
-              fetchLikes(user.id_str);
+              fetchLikes(user.id);
             }
             handleClose();
           }}
@@ -105,8 +105,8 @@ export default function RightClickMenu({
       {isTweetNode ? (
         <MenuItem
           onClick={() => {
-            if (tooltipNode?.id_str) {
-              fetchRetweets(tooltipNode?.id_str);
+            if (tooltipNode?.id) {
+              fetchRetweets(tooltipNode?.id);
             }
             handleClose();
           }}
@@ -117,8 +117,8 @@ export default function RightClickMenu({
       {hasRetweet ? (
         <MenuItem
           onClick={() => {
-            if (tooltipNode?.retweeted_status?.user.id_str) {
-              fetchTimeline(tooltipNode?.retweeted_status?.user.id_str);
+            if (tooltipNode?.retweeted_status?.user.id) {
+              fetchTimeline(tooltipNode?.retweeted_status?.user.id);
             }
             handleClose();
           }}

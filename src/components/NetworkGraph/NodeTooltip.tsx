@@ -32,7 +32,7 @@ const TooltipStyles = styled.div`
     grid-template-columns: ${AVATAR_WIDTH}px 1fr;
   }
   position: relative;
-  .id_str {
+  .id {
     font-size: 0.7em;
     position: absolute;
     top: -16px;
@@ -141,7 +141,7 @@ export const NodeTooltipContent = React.forwardRef(
             </RowDiv>
             {tweet && (
               <>
-                <div className="id_str">{tweet.id_str}</div>
+                <div className="id_str">{tweet.id}</div>
                 <TweetContent {...{ tweet, isTooltip: true }} />
               </>
             )}

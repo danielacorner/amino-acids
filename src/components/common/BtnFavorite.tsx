@@ -25,7 +25,7 @@ export default function BtnFavorite({
   const isUser = Boolean(user);
   const isTweet = !isUser;
 
-  const isFavorite = isTweet ? tweet && favorites.includes(tweet.id_str) : null;
+  const isFavorite = isTweet ? tweet && favorites.includes(tweet.id) : null;
   const isFavoriteUser = isUser
     ? user && favoriteUsers.includes(user.screen_name)
     : null;
@@ -47,7 +47,7 @@ export default function BtnFavorite({
           if (isUser && user) {
             toggleFavoriteUser(user.screen_name);
           } else if (!isUser && tweet) {
-            toggleFavorite(tweet.id_str);
+            toggleFavorite(tweet.id);
           }
           rerender();
         }}

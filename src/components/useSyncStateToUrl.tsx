@@ -15,7 +15,7 @@ export default function useSyncStateToUrl() {
     // const queryObj = qs.parse(search);
     const newQueryObj = {
       ...queryObj,
-      ...(nodes ? { nodes: nodes.map((t) => t.id_str).join(",") } : {}),
+      ...(nodes ? { nodes: nodes.map((t) => t.id).join(",") } : {}),
     };
 
     const newSearch = "?" + qs.stringify(newQueryObj);

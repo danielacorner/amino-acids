@@ -95,7 +95,7 @@ export default function TweetContent({
           {mediaArr.map((mediaItem) => {
             return (
               <MediaContent
-                key={mediaItem.id_str}
+                key={mediaItem.id}
                 {...mediaItem}
                 {...{
                   autoPlay,

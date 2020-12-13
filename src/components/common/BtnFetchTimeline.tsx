@@ -23,7 +23,7 @@ export default function BtnFetchTimeline({ user }: { user: User }) {
             border: "1px solid cornflowerblue",
             color: `hsl(200,50%,${isLight ? 30 : 70}%)`,
           }}
-          onClick={() => user?.id_str && fetchTimeline(user.id_str)}
+          onClick={() => user?.id && fetchTimeline(user.id)}
           onContextMenu={(e) => {
             e.preventDefault();
             setIsMenuOpen(true);

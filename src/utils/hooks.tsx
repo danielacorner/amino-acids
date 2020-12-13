@@ -79,7 +79,7 @@ export function useFetchTimeline() {
   ) => {
     setLoading(true);
 
-    const nodesByUser = nodes.filter((t) => t.user.id_str === userId);
+    const nodesByUser = nodes.filter((t) => t.user.id === userId);
     const maxIdParam = getMaxIdParam(nodesByUser);
 
     const resp = await fetch(
@@ -112,7 +112,7 @@ function getMaxIdParam(nodesByUser: Tweet[]) {
     ? ""
     : // find the smallest tweet id to use as max_id
       `&max_id=${nodesByUser.reduce(
-        (acc, tweet) => Math.min(acc, Number(tweet.id_str)),
+        (acc, tweet) => Math.min(acc, Number(tweet.id)),
         Infinity
       )}`;
 }
@@ -179,7 +179,7 @@ export function useFetchLikes() {
       ...likesByUserId,
       [userId]: uniq([
         ...(likesByUserId?.[userId] || []),
-        ...likedTweets.map((tweet) => tweet.id_str),
+        ...likedTweets.map((tweet) => tweet.id),
       ]),
     };
     setLikesByUserId(newLikesByUserId);
@@ -212,13 +212,13 @@ export function useFetchRetweets() {
     if (retweetTweets.length === 0) {
       return;
     }
-    // add to the retweets object for tweet.id_str
+    // add to the retweets object for tweet.id
     // setRetweetsByTweetId({
     //   // * link reply nodes by Tweet.in_reply_to_id
     //   ...retweetsByTweetId,
     //   [tweetId]: [
     //     ...(retweetsByTweetId?.[tweetId] || []),
-    //     ...retweetTweets.map((tweet) => tweet.id_str),
+    //     ...retweetTweets.map((tweet) => tweet.id),
     //   ],
     // });
     setNodes(
@@ -259,9 +259,9 @@ export function useParamsForFetch() {
 export const useGetIsLikeLink = () => {
   const likesByUserId = useLikesByUserId();
   return ({ source, target }) =>
-    target?.user?.id_str &&
-    target.user.id_str in likesByUserId &&
-    likesByUserId[target.user.id_str].includes(source.id_str);
+    target?.user?.id &&
+    target.user.id in likesByUserId &&
+    likesByUserId[target.user.id].includes(source.id);
 };
 
 export const getIsRetweetLink = ({ source, target }) => {

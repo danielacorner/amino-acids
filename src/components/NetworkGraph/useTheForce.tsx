@@ -215,14 +215,14 @@ export function useTheForce(fg: any, graph: { nodes: any[]; links: any[] }) {
     // const clusterCenters: { [userId: string]: Tweet } = userNodes.reduce(
     //   (acc, cur) =>
     //     // if we don't already have the user node, add it to the object
-    //     ({ ...acc, [cur.user.id_str]: cur }),
-    //   // !(cur.user.id_str in acc) ? { ...acc, [cur.user.id_str]: cur } : acc,
+    //     ({ ...acc, [cur.user.id]: cur }),
+    //   // !(cur.user.id in acc) ? { ...acc, [cur.user.id]: cur } : acc,
     //   {}
     // );
     // fg.d3Force("cluster", (alpha) => {
     //   graphWithUsers.nodes.forEach(function (d) {
     //     const cluster = clusterCenters[d.cluster] as any;
-    //     if (!cluster || cluster.id_str === d.id_str) {
+    //     if (!cluster || cluster.id === d.id) {
     //       return;
     //     }
     //     let x = d.x - (cluster.x || 0),

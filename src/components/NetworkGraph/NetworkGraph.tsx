@@ -6,14 +6,11 @@ import styled from "styled-components/macro";
 import { useForceGraphProps } from "./useForceGraphProps";
 import {
   useConfig,
-  useLikesByUserId,
   useRetweetsByTweetId,
   useNodes,
 } from "../../providers/store";
 // https://www.npmjs.com/package/d3-force-cluster
 import { Link, Tweet } from "../../types";
-import { uniqBy } from "lodash";
-import { EMPTY_TWEET } from "../../utils/emptyTweet";
 import GraphRightClickMenu from "./GraphRightClickMenu";
 import { useTheForce } from "./useTheForce";
 
@@ -38,7 +35,6 @@ function Graph() {
   const { is3d, showUserNodes, replace } = useConfig();
   const nodes = useNodes();
   console.log("🌟🚨: Graph -> nodes", nodes);
-  const likesByUserId = useLikesByUserId();
   const retweetsByTweetId = useRetweetsByTweetId();
 
   // uncomment to grab the current state and copy-paste into mockTweetsData.json
@@ -62,32 +58,15 @@ function Graph() {
     nodes: [] as Tweet[],
     links: [] as Link[],
   });
-  const [userNodes, setUserNodes] = useState([] as Tweet[]);
-
-  const userToLikesLinks = showUserNodes
-    ? userNodes.reduce((acc, userNode) => {
-        const userLikes = likesByUserId[userNode.id_str];
-        if (userLikes) {
-          const likedTweetLinks = userLikes.map((likedTweetId) => {
-            const source = Number(likedTweetId);
-            const target = Number(userNode.id_str);
-            return { source, target };
-          });
-          return [...acc, ...likedTweetLinks];
-        } else {
-          return acc;
-        }
-      }, [] as Link[])
-    : [];
 
   const tweetToRetweetsLinks = showUserNodes
     ? nodes.reduce((acc, tweet) => {
-        const retweetsOfThisTweet = retweetsByTweetId[tweet.id_str];
+        const retweetsOfThisTweet = retweetsByTweetId[tweet.id];
         if (retweetsOfThisTweet) {
           const linksFromRetweetsOfThisTweet = retweetsOfThisTweet.map(
             (idOfOriginalTweet) => {
               const source = Number(idOfOriginalTweet);
-              const target = Number(tweet.id_str);
+              const target = Number(tweet.id);
               return { source, target };
             }
           );
@@ -100,32 +79,10 @@ function Graph() {
 
   const graphWithUsers = {
     ...graph,
-    nodes: [...graph.nodes, ...(showUserNodes ? userNodes : [])],
-    links: [
-      ...graph.links,
-      ...tweetToRetweetsLinks,
-      ...(showUserNodes
-        ? [
-            // links from each user to their nodes
-            ...nodes.map((t) => ({
-              // source: its user
-              source: Number(t.user.id_str),
-              // target: the tweet
-              target: Number(t.id_str),
-            })),
-            // links from each user to their likes
-            ...userToLikesLinks,
-          ]
-        : []),
-    ],
+    nodes: [...graph.nodes],
+    links: [...graph.links, ...tweetToRetweetsLinks],
   };
   console.log("🌟🚨: Graph -> graphWithUsers", graphWithUsers);
-
-  //
-  // show/hide user nodes
-  //
-
-  useShowHideUserNodes(showUserNodes, setUserNodes, nodes);
 
   //
   // sync graph with store
@@ -136,12 +93,12 @@ function Graph() {
       // id <- +id_str
       .map((t) => ({
         ...t,
-        id: Number(t.id_str),
+        id: Number(t.id),
       }))
-      .filter((t) => Boolean(t.user?.id_str));
+      .filter((t) => Boolean(t.user?.id));
     // filter out nodes without users
 
-    const nodeIds = graph.nodes.map((node) => node.id_str);
+    const nodeIds = graph.nodes.map((node) => node.id);
 
     // to prevent existing node re-renders, we'll spread existing nodes, and only spread new nodes on the end
 
@@ -149,7 +106,7 @@ function Graph() {
     const newNodes = replace
       ? nodes
       : // new nodes are ones whose ids aren't already in the graph
-        nodesWithUser.filter((node) => !nodeIds.includes(node.id_str));
+        nodesWithUser.filter((node) => !nodeIds.includes(node.id));
 
     // * consider spreading newLinks if not doing so causes a performance issue
 
@@ -200,28 +157,3 @@ function Graph() {
 }
 
 export default NetworkGraph;
-
-function useShowHideUserNodes(
-  showUserNodes: boolean,
-  setUserNodes: React.Dispatch<React.SetStateAction<Tweet[]>>,
-  nodes: Tweet[]
-) {
-  useEffect(() => {
-    if (!showUserNodes) {
-      setUserNodes([]);
-    } else {
-      // add nodes for each user
-      const nonUniqueUserNodes: Tweet[] = nodes.map((tweet) => ({
-        ...EMPTY_TWEET,
-        id: Number(tweet.user.id_str),
-        id_str: tweet.user.id_str,
-        user: tweet.user,
-        isUserNode: true,
-      }));
-
-      // deduplicate
-      const newUserNodes = uniqBy(nonUniqueUserNodes, (d) => d.user.id_str);
-      setUserNodes(newUserNodes);
-    }
-  }, [setUserNodes, showUserNodes, nodes]);
-}

@@ -136,9 +136,9 @@ const Gallery = () => {
     nodes.length > 0 &&
     nodes.reduce((acc, tweet, idx) => {
       if (idx === 0) {
-        firstUserId = tweet.user.id_str;
+        firstUserId = tweet.user.id;
       } else {
-        acc = tweet.user.id_str === firstUserId;
+        acc = tweet.user.id === firstUserId;
       }
       return acc;
     }, true);
@@ -175,7 +175,7 @@ const Gallery = () => {
       )}
       <div className="galleryContent">
         {nodes.map((tweet) => (
-          <GridItem key={tweet.id_str} tweet={tweet} />
+          <GridItem key={tweet.id} tweet={tweet} />
         ))}
       </div>
       {loading ? <ScrollMoreIndicator /> : null}
@@ -240,8 +240,8 @@ function GridItem({ tweet }: { tweet: Tweet }) {
 
 function DeleteTweetBtn({ tweet }: { tweet: Tweet }) {
   const deleteTweet = useDeleteTweet();
-  const handleDelete = useCallback(() => deleteTweet(tweet.id_str), [
-    tweet.id_str,
+  const handleDelete = useCallback(() => deleteTweet(tweet.id), [
+    tweet.id,
     deleteTweet,
   ]);
   return <CloseIcon onClick={handleDelete} />;

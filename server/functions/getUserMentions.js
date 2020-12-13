@@ -38,7 +38,7 @@ async function getUserMentions({ userId, numTweets, screenName, filterFn }) {
 
     fetchedTweets = uniqBy(
       [...fetchedTweets, ...result.data.filter(filterFn)],
-      (t) => t.id_str
+      (t) => t.id
     );
   }
 

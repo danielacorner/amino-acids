@@ -7,7 +7,7 @@ export function useFetchBotScoreForTweet() {
 
   function setBotScoreForTweet(botScore: BotScore, tweet: Tweet) {
     const tweetWithBotScore = { ...tweet, botScore };
-    const tweetIndex = nodes.findIndex((t) => t.id_str === tweet.id_str);
+    const tweetIndex = nodes.findIndex((t) => t.id === tweet.id);
 
     setNodes([
       ...nodes.slice(0, tweetIndex),
@@ -21,7 +21,7 @@ export function useFetchBotScoreForTweet() {
       return;
     }
     const nodesByUser = nodes.filter(
-      (t) => t.user.id_str === tweetOrUserNode.user.id_str
+      (t) => t.user.id === tweetOrUserNode.user.id
     );
     const resp = await fetch("/api/generate_bot_score", {
       headers: { "content-type": "application/json" },

@@ -8,7 +8,7 @@ const BtnFetchMore = ({ user }: { user: User }) => {
   const { fetchTimeline, loading } = useFetchTimeline();
 
   const handleFetchMore = () => {
-    fetchTimeline(user.id_str, true);
+    fetchTimeline(user.id, true);
   };
   return (
     <Button variant="outlined" disabled={loading} onClick={handleFetchMore}>

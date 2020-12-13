@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const path = require("path");
-const { readFromFile } = require("./utils/fsUtils");
 
 app.use(express.static(`main`));
 app.use(bodyParser.json());
@@ -21,10 +20,33 @@ app.get("/", function (req, res) {
 });
 
 app.get("/api/protein", async function (req, res) {
-  readFromFile("../data/proteins/3j3q.xml", (proteinData) => {
-    console.log("🌟🚨 ~ proteinData", proteinData);
-    res.json(proteinData);
-  });
+  // readFromFile("../data/proteins/3j3q.xml", (proteinData) => {
+  //   console.log("🌟🚨 ~ proteinData", proteinData);
+  //   res.json(proteinData);
+  // });
+
+  const shapes = [
+    {
+      id: 1,
+      x: 100,
+      y: 100,
+      z: 100,
+    },
+    {
+      id: 2,
+      x: 200,
+      y: 200,
+      z: 200,
+    },
+    {
+      id: 3,
+      x: 200,
+      y: 300,
+      z: 200,
+    },
+  ];
+
+  res.json(shapes);
 });
 
 app.listen(process.env.PORT || 8080, () => {

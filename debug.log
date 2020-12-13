@@ -2,3 +2,4 @@
 [1013/205136.277:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
 [1017/223452.388:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
 [1018/023443.684:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\hazy_\AppData\Local\Google\Chrome\User Data\Crashpad\attachments\42989be2-db60-46e8-820c-1cfe72f24f0f: The system cannot find the path specified. (0x3)
+[1212/115410.552:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)

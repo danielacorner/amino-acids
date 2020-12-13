@@ -103,7 +103,7 @@ export function useForceGraphProps() {
         drawBotScore(node, ctx);
       }
 
-      if (tooltipNode?.id_str === node.id_str) {
+      if (tooltipNode?.id === node.id) {
         drawHighlightCircle(node, ctx, Boolean(tooltipNode?.isUserNode));
       }
 

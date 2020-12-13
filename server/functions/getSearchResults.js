@@ -34,7 +34,7 @@ async function getSearchResults({
 
   const lastStatus = allStatuses[allStatuses.length - 1];
 
-  max_id = lastStatus.id_str;
+  max_id = lastStatus.id;
 
   const statusesWithMedia = result.data.statuses.filter(
     (node) => getMediaArr(node).length > 0
@@ -59,7 +59,7 @@ async function getSearchResults({
 
       const last_tweet = nextResult.data.statuses[numTweets - 1];
 
-      max_id = last_tweet ? last_tweet.id_str : null;
+      max_id = last_tweet ? last_tweet.id : null;
 
       resultsWithMedia.data.statuses = [
         ...resultsWithMedia.data.statuses,
@@ -72,7 +72,7 @@ async function getSearchResults({
       ...resultsWithMedia,
       data: {
         ...resultsWithMedia.data,
-        statuses: uniqBy(resultsWithMedia.data.statuses, (t) => t.id_str).slice(
+        statuses: uniqBy(resultsWithMedia.data.statuses, (t) => t.id).slice(
           0,
           numTweets
         ),

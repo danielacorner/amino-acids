@@ -9,6 +9,7 @@ import {
   useNodes,
   useSetLoading,
   useConfig,
+  useSetNodes,
 } from "./providers/store";
 // import { query as q } from "faunadb";
 // import { faunaClient } from "./providers/faunaProvider";
@@ -18,7 +19,6 @@ import LeftDrawer, { LEFT_DRAWER_WIDTH } from "./components/LeftDrawer";
 import qs from "query-string";
 import { useLocation } from "react-router";
 import NavAndViz from "components/NavAndViz/NavAndViz";
-import useSyncStateToUrl from "components/useSyncStateToUrl";
 
 // 3d protein react-3-fiber nodes
 
@@ -65,7 +65,7 @@ function App() {
 function AppFunctionalHooks() {
   useFetchNodesOnMount();
   useFetchQueryTweetsOnMount();
-  useSyncStateToUrl();
+  // useSyncStateToUrl();
   useStopLoadingEventually();
   useDetectOffline();
 
@@ -140,7 +140,7 @@ export default App;
  * [docs](https://docs.fauna.com/fauna/current/tutorials/crud?lang=javascript#retrieve)
  */
 function useFetchNodesOnMount() {
-  // const setNodes = useSetNodes();
+  const setNodes = useSetNodes();
   useMount(() => {
     // fetch the nodes on mount
     // https://stackoverflow.com/questions/58704755/how-to-read-xml-filedata-xml-in-react-js
@@ -155,6 +155,12 @@ function useFetchNodesOnMount() {
         // const converted = JSON.parse(jsonText);
         // console.log("🌟🚨 ~ .then ~ converted", converted);
         // return converted;
+        return response.json();
+      })
+      .then((data) => {
+        console.log("🌟🚨 ~ .then ~ data", data);
+
+        setNodes(data);
       })
       .catch(function (error) {
         console.log(error);

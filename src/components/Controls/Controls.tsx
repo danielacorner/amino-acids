@@ -100,7 +100,7 @@ function SaveDataForm() {
     <TwoColFormStyles
       onSubmit={(e) => {
         e.preventDefault();
-        addSave({ saveName: dataName, ids: nodes.map((t) => t.id_str) });
+        addSave({ saveName: dataName, ids: nodes.map((t) => t.id) });
       }}
     >
       <TextField

@@ -79,14 +79,14 @@ const [useStore] = create(
         process.env.NODE_ENV === "development" && SHOULD_MOCK_TWEETS
           ? /* mockTweetsData.nodes */ []
           : ([] as Tweet[]),
-      // map between tweet.user.id_str and the liked tweet.id_str
+      // map between tweet.user.id and the liked tweet.id
       // likesByUserId is populated when we "fetch nodes liked by a user"
       likesByUserId:
         process.env.NODE_ENV === "development"
           ? mockTweetsData.likesByUserId
           : {},
       setLikesByUserId: (likesByUserId) => set(() => ({ likesByUserId })),
-      // map between tweet.id_str and the retweeted tweet.id_str
+      // map between tweet.id and the retweeted tweet.id
       retweetsByTweetId:
         process.env.NODE_ENV === "development"
           ? mockTweetsData.retweetsByTweetId
@@ -319,7 +319,7 @@ export const useSetNodes = () => {
     const newTweets =
       replace || forceReplace
         ? nodes
-        : uniqBy([...nodesFromServer, ...nodes], (t) => t.id_str);
+        : uniqBy([...nodesFromServer, ...nodes], (t) => t.id);
 
     // * whenever we change the nodes,
     // * scan all the nodes once to create
@@ -329,22 +329,22 @@ export const useSetNodes = () => {
       (acc, tweet) => {
         // for each tweet,
         // if the tweet has a retweet in it
-        const hasRetweet = tweet?.retweeted_status?.id_str;
-        // add its id_str to the array associated with its tweet.id_str
+        const hasRetweet = tweet?.retweeted_status?.id;
+        // add its id_str to the array associated with its tweet.id
         if (hasRetweet) {
           // check the existing nodes for this tweet,
           // if it exists, add it to the list to create a link
           // *(this operation is now O^N2, but it's only performed when the nodes change)
           const isRetweetInAllTweets = Boolean(
-            newTweets.find((t) => t.id_str === tweet.retweeted_status?.id_str)
+            newTweets.find((t) => t.id === tweet.retweeted_status?.id)
           );
 
           if (isRetweetInAllTweets) {
             acc = {
               ...acc,
-              [tweet.id_str]: [
-                ...(acc[tweet.id_str] || []),
-                tweet.retweeted_status?.id_str,
+              [tweet.id]: [
+                ...(acc[tweet.id] || []),
+                tweet.retweeted_status?.id,
               ],
             };
           }
@@ -369,10 +369,10 @@ export const useSetNodes = () => {
 
     const newTweetsTagged = newTweets.map((t) => ({
       ...t,
-      ...(tweetIdsToTagAsOriginal.includes(t.id_str)
+      ...(tweetIdsToTagAsOriginal.includes(t.id)
         ? { isRetweetNode: true }
         : {}),
-      ...(tweetIdsToTagAsRetweet.includes(t.id_str)
+      ...(tweetIdsToTagAsRetweet.includes(t.id)
         ? { isOriginalNode: true }
         : {}),
     }));
@@ -391,7 +391,7 @@ export const useAddTweets = () => {
   );
 
   return (nodes: Tweet[]) => {
-    const newTweets = uniqBy([...nodesFromServer, ...nodes], (t) => t.id_str);
+    const newTweets = uniqBy([...nodesFromServer, ...nodes], (t) => t.id);
     setNodesFromServer(newTweets);
   };
 };
@@ -407,7 +407,7 @@ export const useDeleteTweet = () => {
   );
   return useCallback(
     (tweetId: string) => {
-      const newTweets = nodesFromServer.filter((t) => t.id_str !== tweetId);
+      const newTweets = nodesFromServer.filter((t) => t.id !== tweetId);
       setNodesFromServer(newTweets);
     },
     [nodesFromServer, setNodesFromServer]

@@ -58,10 +58,7 @@ const BottomDrawer = () => {
   // when we click a new node, open the bottom drawer
   const prevSelectedNode = useRef(null as Tweet | null);
   useEffect(() => {
-    if (
-      selectedNode &&
-      selectedNode.id_str !== prevSelectedNode.current?.id_str
-    ) {
+    if (selectedNode && selectedNode.id !== prevSelectedNode.current?.id) {
       prevSelectedNode.current = selectedNode;
       setOffsetY(maxDrawerHeight);
       const popUpBottomDrawer = () => {
@@ -160,7 +157,7 @@ export function OpenTweetBtn({
     <a
       className="viewTweet"
       style={{ transform: `translateY(${-offsetY}px)` }}
-      href={`https://www.twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`}
+      href={`https://www.twitter.com/${tweet.user.screen_name}/status/${tweet.id}`}
       target="_blank"
       rel="noopener noreferrer"
     >

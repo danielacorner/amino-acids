@@ -19,7 +19,7 @@ const Wordcloud = () => {
     text: string;
     quotedText?: string;
   }[] = nodes.map((t) => ({
-    id_str: t.id_str,
+    id_str: t.id,
     text: t.text,
     quotedText: t.quoted_status?.text,
   }));

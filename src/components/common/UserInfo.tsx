@@ -45,7 +45,7 @@ export default function UserInfo({
   // fetch user profile on mount
   // useEffect(() => {
   //   fetch(
-  //     `${SERVER_URL}/api/user_info?id_str=${user?.id_str}&screen_name=${user?.screen_name}`
+  //     `${SERVER_URL}/api/user_info?id_str=${user?.id}&screen_name=${user?.screen_name}`
   //   )
   //     .then((resp) => resp.json())
   //     .then(({ data }) => {
