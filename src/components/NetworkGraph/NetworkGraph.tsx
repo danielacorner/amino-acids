@@ -3,7 +3,7 @@ import NodeTooltip from "./NodeTooltip";
 // https://www.npmjs.com/package/react-force-graph
 import styled from "styled-components/macro";
 import GraphRightClickMenu from "./GraphRightClickMenu";
-import ThreeDee from "./ThreeDee";
+import ThreeDee from "./ThreeDee/ThreeDee";
 
 export const GraphStyles = styled.div`
   width: 100%;

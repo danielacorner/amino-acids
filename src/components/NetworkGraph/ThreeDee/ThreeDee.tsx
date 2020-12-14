@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useWindowSize } from "utils/hooks";
 import { Controls, useControl } from "react-three-gui";
+import { BackDrop, KeyLight } from "./Shapes";
 
 function Box(props) {
   // This reference will give us direct access to the mesh
@@ -42,8 +43,11 @@ const ThreeDee = () => {
       <Controls.Canvas
         style={{ height: windowSize.height, width: windowSize.width }}
       >
-        <ambientLight />
-        <pointLight position={[10, 10, 10]} />
+        {/* <Light brightness={10} color={"white"} /> */}
+        {/* <pointLight position={[10, 10, 10]} /> */}
+        <KeyLight brightness={10} color={"white"} />
+        <BackDrop />
+        {/* <GroundPlane /> */}
         <Box position={[-1.2, 0, 0]} />
         <Box position={[1.2, 0, 0]} />
       </Controls.Canvas>
