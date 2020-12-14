@@ -1,8 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { Suspense, useRef, useState } from "react";
 import { useWindowSize } from "utils/hooks";
 import { Controls, useControl } from "react-three-gui";
 import { BackDrop, FillLight, KeyLight, Sphere, SunLight } from "./Shapes";
-import MemoryStats from "react-memorystats";
 import { OrbitControls } from "@react-three/drei";
 import SarsCov2 from "./GLTFs/SarsCov2";
 
@@ -44,7 +43,6 @@ const ThreeDee = () => {
 
   return (
     <>
-      <MemoryStats corner="topLeft" />,
       <Controls.Provider>
         <Controls.Canvas
           style={{ height: windowSize.height, width: windowSize.width }}
@@ -60,10 +58,12 @@ const ThreeDee = () => {
           <Box position={[-1.2, 0, 0]} />
           <Box position={[1.2, 0, 0]} />
           <ManySpheres />
-          <SarsCov2 />
+          <Suspense fallback={null}>
+            <SarsCov2 />
+          </Suspense>
+          <OrbitControls />
         </Controls.Canvas>
         <Controls />
-        <OrbitControls />
       </Controls.Provider>
     </>
   );
@@ -84,6 +84,7 @@ function ManySpheres() {
     <>
       {[...new Array(Math.round(numSpheres))].map((_, idx) => (
         <Sphere
+          key={idx}
           position={[
             (idx - (numSpheres - 1) / 2) / numSpheres ** 0.7,
             randBetween(0.5, -0.5),
@@ -100,5 +101,3 @@ function randBetween(min: number, max: number): number {
   // randBetween(-2,2)
   return Math.random() * (max - min) + min;
 }
-
-useGLTF.preload("/src/assets/models/SarsCov2/scene.gltf");

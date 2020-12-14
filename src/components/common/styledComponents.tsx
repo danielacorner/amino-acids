@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components/macro";
-import { Typography, Switch, Tooltip } from "@material-ui/core";
-import { FORM_HEIGHT } from "../../utils/constants";
+import { Typography } from "@material-ui/core";
 
 export const ColumnDiv = styled.div`
   width: 100%;
