@@ -1,9 +1,9 @@
 import React from "react";
 import { useControl } from "react-three-gui";
 
-export function Sphere() {
+export function Sphere({ position }) {
   return (
-    <mesh visible userData={{ test: "hello" }} position={[0, 0, 0]} castShadow>
+    <mesh visible userData={{ test: "hello" }} position={position} castShadow>
       <sphereGeometry attach="geometry" args={[1, 16, 16]} />
       <meshStandardMaterial
         attach="material"

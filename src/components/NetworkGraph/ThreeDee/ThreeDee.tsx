@@ -1,7 +1,14 @@
 import React, { useRef, useState } from "react";
 import { useWindowSize } from "utils/hooks";
 import { Controls, useControl } from "react-three-gui";
-import { BackDrop, FillLight, KeyLight, RimLight, SunLight } from "./Shapes";
+import {
+  BackDrop,
+  FillLight,
+  KeyLight,
+  RimLight,
+  Sphere,
+  SunLight,
+} from "./Shapes";
 
 function Box(props) {
   // This reference will give us direct access to the mesh
@@ -38,6 +45,7 @@ function Box(props) {
 }
 const ThreeDee = () => {
   const windowSize = useWindowSize();
+
   return (
     <Controls.Provider>
       <Controls.Canvas
@@ -53,6 +61,7 @@ const ThreeDee = () => {
         {/* <GroundPlane /> */}
         <Box position={[-1.2, 0, 0]} />
         <Box position={[1.2, 0, 0]} />
+        <ManySpheres />
       </Controls.Canvas>
       <Controls />
     </Controls.Provider>
@@ -60,3 +69,33 @@ const ThreeDee = () => {
 };
 
 export default ThreeDee;
+
+// * according to this, 1000 spheres can be on the screen at a time without impacting frame rate (on my computer)
+function ManySpheres() {
+  const numSpheres = useControl("numSpheres", {
+    type: "number",
+    min: 1,
+    max: 5000,
+    value: 1,
+  });
+  console.log("🌟🚨 ~ ManySpheres ~ numSpheres", numSpheres);
+  return (
+    <>
+      {[...new Array(Math.round(numSpheres))].map((_, idx) => (
+        <Sphere
+          position={[
+            (idx - (numSpheres - 1) / 2) / numSpheres ** 0.7,
+            randBetween(0.5, -0.5),
+            0,
+          ]}
+        />
+      ))}
+    </>
+  );
+}
+
+function randBetween(min: number, max: number): number {
+  // randBetween(0,2)
+  // randBetween(-2,2)
+  return Math.random() * (max - min) + min;
+}
