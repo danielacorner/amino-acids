@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import "./App.css";
 import styled from "styled-components/macro";
-import BottomDrawer from "./components/BottomDrawer/BottomDrawer";
 import { useMount } from "./utils/utils";
 import { useFetchTweetsByIds } from "./utils/hooks";
 import {
@@ -15,7 +14,6 @@ import {
 // import { faunaClient } from "./providers/faunaProvider";
 import { useIsLight } from "./providers/ThemeManager";
 import "./video-react.css"; // import video-react css
-import LeftDrawer, { LEFT_DRAWER_WIDTH } from "./components/LeftDrawer";
 import qs from "query-string";
 import { useLocation } from "react-router";
 import NavAndViz from "components/NavAndViz/NavAndViz";
@@ -35,8 +33,6 @@ import NavAndViz from "components/NavAndViz/NavAndViz";
 
 const AppStyles = styled.div`
   transition: background 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-  display: grid;
-  grid-template-columns: ${LEFT_DRAWER_WIDTH}px 1fr;
   min-height: 100vh;
   * {
     margin: 0;
@@ -53,9 +49,7 @@ const AppStyles = styled.div`
 function App() {
   return (
     <AppStyles className="App">
-      <LeftDrawer />
       <NavAndViz />
-      <BottomDrawer />
       <AppStylesHooks />
       <AppFunctionalHooks />
     </AppStyles>

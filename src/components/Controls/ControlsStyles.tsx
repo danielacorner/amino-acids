@@ -28,17 +28,7 @@ const ControlsStyles = styled.div`
   .MuiFormControlLabel-root {
     ${(props) => (props.isDrawerOpen ? "" : "margin-right: 0;")}
   }
-  [class*="Checkboxes__RadioBtnsStyles"] {
-    ${(props) => (props.isDrawerOpen ? "" : "margin-right: -8px;")}
-  }
-  .checkboxes {
-    display: grid;
-    max-width: ${(props) => (props.isDrawerOpen ? 200 : FORM_HEIGHT)}px;
-    ${(props) =>
-      props.isDrawerOpen
-        ? "grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));"
-        : "margin-left: auto;"};
-  }
+
   .MuiFormGroup-root {
     ${(props) =>
       props.isDrawerOpen ? "" : `width: ${FORM_HEIGHT}px; margin: 0 0 0 auto;`};

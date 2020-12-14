@@ -13,7 +13,6 @@ import {
 } from "../providers/store";
 import { geoDistanceKm } from "./distanceFromCoords";
 import { Tweet } from "../types";
-import { getFavorites } from "../components/common/BtnFavorite";
 import { uniq } from "lodash";
 
 export function useFetchTweetsByIds(): (ids: string[]) => void {
@@ -119,7 +118,6 @@ function getMaxIdParam(nodesByUser: Tweet[]) {
 
 export function useFetchUsers() {
   const { allowedMediaTypesParam } = useParamsForFetch();
-  const { toggleFavoriteUser } = getFavorites();
   const setNodes = useSetNodes();
   return async (userHandles: string[]) => {
     const results = await (Promise as any).allSettled(
@@ -143,7 +141,6 @@ export function useFetchUsers() {
           newTweets = [...newTweets, tweetOrErr];
         } else {
           console.log(tweetOrErr);
-          toggleFavoriteUser(userHandle);
         }
       }
     );

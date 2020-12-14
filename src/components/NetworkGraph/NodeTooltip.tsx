@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useSpring, animated } from "react-spring";
 import styled from "styled-components/macro";
-import TweetContent, { getRetweetedUser } from "../TweetContent/TweetContent";
 import { PADDING } from "../../utils/utils";
 import useStore from "../../providers/store";
 import useContainerDimensions from "../../utils/useContainerDimensions";
@@ -100,8 +99,7 @@ const NodeTooltip = () => {
   const tweet: Tweet = tooltipNode || (lastTooltipNode.current as Tweet);
   const isLight = useIsLight();
 
-  const retweetedUser = getRetweetedUser(tweet);
-  const originalPoster = retweetedUser ? retweetedUser : tweet?.user;
+  const originalPoster = tweet?.user;
   return (
     <NodeTooltipContent
       {...{ springToMousePosition, ref, isLight, originalPoster, tweet }}
@@ -142,7 +140,6 @@ export const NodeTooltipContent = React.forwardRef(
             {tweet && (
               <>
                 <div className="id_str">{tweet.id}</div>
-                <TweetContent {...{ tweet, isTooltip: true }} />
               </>
             )}
           </div>

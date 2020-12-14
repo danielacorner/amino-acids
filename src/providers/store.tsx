@@ -455,16 +455,6 @@ export function useAllowedMediaTypes(): string[] {
   ];
 }
 
-export const useIsLeftDrawerOpen = () => {
-  const isDrawerOpen = useStore(
-    (state) => (state as GlobalStateStoreType).isDrawerOpen
-  );
-  const setIsDrawerOpen = useStore(
-    (state) => (state as GlobalStateStoreType).setIsDrawerOpen
-  );
-  return { isDrawerOpen, setIsDrawerOpen };
-};
-
 export const useRecomputeGraph = () => {
   const nodes = useNodes();
   const setNodes = useSetNodes();

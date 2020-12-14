@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { ForceGraph2D, ForceGraph3D } from "react-force-graph";
+import { ForceGraph2D } from "react-force-graph";
 import NodeTooltip from "./NodeTooltip";
 // https://www.npmjs.com/package/react-force-graph
 import styled from "styled-components/macro";
 import { useForceGraphProps } from "./useForceGraphProps";
-import {
-  useConfig,
-  useRetweetsByTweetId,
-  useNodes,
-} from "../../providers/store";
+import { useConfig, useNodes } from "../../providers/store";
 // https://www.npmjs.com/package/d3-force-cluster
 import { Link, Tweet } from "../../types";
 import GraphRightClickMenu from "./GraphRightClickMenu";
 import { useTheForce } from "./useTheForce";
+import ThreeDee from "./ThreeDee";
 
 export const GraphStyles = styled.div`
   width: 100%;
@@ -32,10 +29,9 @@ const NetworkGraph = () => {
 // tslint:disable-next-line: cognitive-complexity
 function Graph() {
   const { fgRef, forceGraphProps } = useForceGraphProps();
-  const { is3d, showUserNodes, replace } = useConfig();
+  const { is3d, replace } = useConfig();
   const nodes = useNodes();
   console.log("🌟🚨: Graph -> nodes", nodes);
-  const retweetsByTweetId = useRetweetsByTweetId();
 
   // uncomment to grab the current state and copy-paste into mockTweetsData.json
 
@@ -58,31 +54,6 @@ function Graph() {
     nodes: [] as Tweet[],
     links: [] as Link[],
   });
-
-  const tweetToRetweetsLinks = showUserNodes
-    ? nodes.reduce((acc, tweet) => {
-        const retweetsOfThisTweet = retweetsByTweetId[tweet.id];
-        if (retweetsOfThisTweet) {
-          const linksFromRetweetsOfThisTweet = retweetsOfThisTweet.map(
-            (idOfOriginalTweet) => {
-              const source = Number(idOfOriginalTweet);
-              const target = Number(tweet.id);
-              return { source, target };
-            }
-          );
-          return [...acc, ...linksFromRetweetsOfThisTweet];
-        } else {
-          return acc;
-        }
-      }, [] as Link[])
-    : [];
-
-  const graphWithUsers = {
-    ...graph,
-    nodes: [...graph.nodes],
-    links: [...graph.links, ...tweetToRetweetsLinks],
-  };
-  console.log("🌟🚨: Graph -> graphWithUsers", graphWithUsers);
 
   //
   // sync graph with store
@@ -132,25 +103,13 @@ function Graph() {
   //
   useTheForce(fg, graph);
 
-  // when new nodes arrive, fetch their bot scores
-  // TODO: disabled while testing
-  // useGenerateBotScoresOnNewTweets();
-
   return (
     <div>
       {is3d ? (
         // https://www.npmjs.com/package/react-force-graph
-        <ForceGraph3D
-          ref={fgRef}
-          graphData={graphWithUsers}
-          {...forceGraphProps}
-        />
+        <ThreeDee />
       ) : (
-        <ForceGraph2D
-          ref={fgRef}
-          graphData={graphWithUsers}
-          {...forceGraphProps}
-        />
+        <ForceGraph2D ref={fgRef} graphData={graph} {...forceGraphProps} />
       )}
     </div>
   );

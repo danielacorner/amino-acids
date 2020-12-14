@@ -39,40 +39,6 @@ export const Body2 = ({ children, ...props }) => (
     {children}
   </Typography>
 );
-export const CollapsibleSwitchWithLabels = ({
-  labelLeft = null,
-  labelRight = null,
-  onChange,
-  checked,
-  css = null,
-  ...props
-}: any) => {
-  return (
-    <ColumnDiv
-      css={`
-        display: grid;
-        grid-auto-flow: column;
-        align-items: center;
-        justify-content: center;
-        height: ${FORM_HEIGHT}px;
-        .label {
-          min-width: 3em;
-        }
-        ${css}
-      `}
-    >
-      {labelLeft && <Body1 className="label">{labelLeft}</Body1>}
-      <Tooltip
-        title={`${labelLeft || ""}${labelLeft && labelRight ? "/" : ""}${
-          labelRight || ""
-        }`}
-      >
-        <Switch onChange={onChange} checked={checked} {...props} />
-      </Tooltip>
-      {labelRight && <Body1 className="label">{labelRight}</Body1>}
-    </ColumnDiv>
-  );
-};
 
 export const CUSTOM_SCROLLBAR_CSS = `
 @supports (overflow: overlay){
