@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
-import { Canvas, useFrame } from "react-three-fiber";
 import { useWindowSize } from "utils/hooks";
+import { Controls, useControl } from "react-three-gui";
 
 function Box(props) {
   // This reference will give us direct access to the mesh
@@ -11,8 +11,14 @@ function Box(props) {
   const [active, setActive] = useState(false);
 
   // Rotate mesh every frame, this is outside of React without overhead
-  useFrame(() => {
-    mesh.current.rotation.x = mesh.current.rotation.y += 0.01;
+  // useFrame(() => {
+  //   mesh.current.rotation.x = mesh.current.rotation.y += 0.01;
+  // });
+
+  const count = useControl("Things", {
+    type: "number",
+    min: 1,
+    max: 100,
   });
 
   return (
@@ -24,7 +30,7 @@ function Box(props) {
       onPointerOver={(event) => setHover(true)}
       onPointerOut={(event) => setHover(false)}
     >
-      <boxBufferGeometry args={[1, 1, 1]} />
+      <boxBufferGeometry args={[count, 1, 1]} />
       <meshStandardMaterial color={hovered ? "hotpink" : "orange"} />
     </mesh>
   );
@@ -32,12 +38,17 @@ function Box(props) {
 const ThreeDee = () => {
   const windowSize = useWindowSize();
   return (
-    <Canvas style={{ height: windowSize.height, width: windowSize.width }}>
-      <ambientLight />
-      <pointLight position={[10, 10, 10]} />
-      <Box position={[-1.2, 0, 0]} />
-      <Box position={[1.2, 0, 0]} />
-    </Canvas>
+    <Controls.Provider>
+      <Controls.Canvas
+        style={{ height: windowSize.height, width: windowSize.width }}
+      >
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
+        <Box position={[-1.2, 0, 0]} />
+        <Box position={[1.2, 0, 0]} />
+      </Controls.Canvas>
+      <Controls />
+    </Controls.Provider>
   );
 };
 
