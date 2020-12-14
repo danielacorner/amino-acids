@@ -1,14 +1,10 @@
 import React, { useRef, useState } from "react";
 import { useWindowSize } from "utils/hooks";
 import { Controls, useControl } from "react-three-gui";
-import {
-  BackDrop,
-  FillLight,
-  KeyLight,
-  RimLight,
-  Sphere,
-  SunLight,
-} from "./Shapes";
+import { BackDrop, FillLight, KeyLight, Sphere, SunLight } from "./Shapes";
+import MemoryStats from "react-memorystats";
+import { OrbitControls } from "@react-three/drei";
+import SarsCov2 from "./GLTFs/SarsCov2";
 
 function Box(props) {
   // This reference will give us direct access to the mesh
@@ -47,24 +43,29 @@ const ThreeDee = () => {
   const windowSize = useWindowSize();
 
   return (
-    <Controls.Provider>
-      <Controls.Canvas
-        style={{ height: windowSize.height, width: windowSize.width }}
-      >
-        {/* <Light brightness={10} color={"white"} /> */}
-        {/* <pointLight position={[10, 10, 10]} /> */}
-        <BackDrop />
-        <KeyLight brightness={5.6} color="#ffbdf4" />
-        <FillLight brightness={2.6} color="#bdefff" />
-        <SunLight />
-        {/* <RimLight brightness={54} color="#fff" /> */}
-        {/* <GroundPlane /> */}
-        <Box position={[-1.2, 0, 0]} />
-        <Box position={[1.2, 0, 0]} />
-        <ManySpheres />
-      </Controls.Canvas>
-      <Controls />
-    </Controls.Provider>
+    <>
+      <MemoryStats corner="topLeft" />,
+      <Controls.Provider>
+        <Controls.Canvas
+          style={{ height: windowSize.height, width: windowSize.width }}
+        >
+          {/* <Light brightness={10} color={"white"} /> */}
+          {/* <pointLight position={[10, 10, 10]} /> */}
+          <BackDrop />
+          <KeyLight brightness={5.6} color="#ffbdf4" />
+          <FillLight brightness={2.6} color="#bdefff" />
+          <SunLight />
+          {/* <RimLight brightness={54} color="#fff" /> */}
+          {/* <GroundPlane /> */}
+          <Box position={[-1.2, 0, 0]} />
+          <Box position={[1.2, 0, 0]} />
+          <ManySpheres />
+          <SarsCov2 />
+        </Controls.Canvas>
+        <Controls />
+        <OrbitControls />
+      </Controls.Provider>
+    </>
   );
 };
 
@@ -99,3 +100,5 @@ function randBetween(min: number, max: number): number {
   // randBetween(-2,2)
   return Math.random() * (max - min) + min;
 }
+
+useGLTF.preload("/src/assets/models/SarsCov2/scene.gltf");
